@@ -1,0 +1,118 @@
+---
+title: "Schools on Repeat"
+output: html_document
+date: "2024-06-03"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(httr)
+library(rvest)
+library(dplyr)
+library(xml2)
+```
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+
+
+```{r UNC}
+
+# Load the HTML content from the website
+uncurl <- "https://unc.nil.store/"
+unchtml <- read_html(uncurl)
+
+# Find the specific parent node
+unc_parent_node <- unchtml %>%
+  html_node(xpath = "//div[contains(@class, 'nested-mobile-menu-heading-container athlete')]//following-sibling::div[@class='nested-mobile-menu']")
+
+# Extract all the nested li elements within the parent node
+unc_nested_li_elements <- unc_parent_node %>%
+  html_nodes("ul > li > ul > li")
+
+# Extract the athlete names and URLs from the nested li elements
+unc_athletes <- unc_nested_li_elements %>%
+  html_nodes("a") %>%
+  {data.frame(
+    name = html_text(., trim = TRUE),
+    site = paste0("https://unc.nil.store", html_attr(., "href")),
+    school = "North Carolina"
+    )}
+```
+
+```{r}
+
+# Load the HTML content from the website
+sfaurl <- "https://nil.store/pages/sfa"
+sfahtml <- read_html(sfaurl)
+
+# Find the specific parent node
+sfa_parent_node <- sfahtml %>%
+  html_node(xpath = "//div[contains(@class, 'nested-mobile-menu-heading-container athlete')]//following-sibling::div[@class='nested-mobile-menu']")
+
+# Extract all the nested li elements within the parent node
+sfa_nested_li_elements <- sfa_parent_node %>%
+  html_nodes("ul > li > ul > li")
+
+# Extract the athlete names and URLs from the nested li elements
+sfa_athletes <- sfa_nested_li_elements %>%
+  html_nodes("a") %>%
+  {data.frame(
+    name = html_text(., trim = TRUE),
+    site = paste0("https://nil.store/pages/sfa", html_attr(., "href")),
+    school = "Stephen F. Austin"
+    )}
+```
+
+```{r}
+
+# Load the HTML content from the website
+dukeurl <- "https://nil.store/pages/duke"
+dukehtml <- read_html(dukeurl)
+
+# Find the specific parent node
+duke_parent_node <- dukehtml %>%
+  html_node(xpath = "//div[contains(@class, 'nested-mobile-menu-heading-container athlete')]//following-sibling::div[@class='nested-mobile-menu']")
+
+# Extract all the nested li elements within the parent node
+duke_nested_li_elements <- duke_parent_node %>%
+  html_nodes("ul > li > ul > li")
+
+# Extract the athlete names and URLs from the nested li elements
+duke_athletes <- duke_nested_li_elements %>%
+  html_nodes("a") %>%
+  {data.frame(
+    name = html_text(., trim = TRUE),
+    site = paste0("https://nil.store/pages/duke", html_attr(., "href")),
+    school = "Duke"
+    )}
+```
+
+```{r Penn State}
+# Load the HTML content from the website
+pennurl <- "https://pennstate.nil.store"
+pennhtml <- read_html(pennurl)
+
+# Find the specific parent node
+penn_parent_node <- pennhtml %>%
+  html_node(xpath = "//div[contains(@class, 'nested-mobile-menu-heading-container athlete')]//following-sibling::div[@class='nested-mobile-menu']")
+
+# Extract all the nested li elements within the parent node
+penn_nested_li_elements <- penn_parent_node %>%
+  html_nodes("ul > li > ul > li")
+
+# Extract the athlete names and URLs from the nested li elements
+penn_athletes <- penn_nested_li_elements %>%
+  html_nodes("a") %>%
+  {data.frame(
+    name = html_text(., trim = TRUE),
+    site = paste0("https://pennstate.nil.store", html_attr(., "href")),
+    school = "Penn State"
+  )}
+```
