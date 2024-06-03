@@ -1,0 +1,46 @@
+---
+title: "Scraping UNC NIL Athletes"
+author: "Aidan Hughes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(httr)
+library(rvest)
+library(dplyr)
+library(xml2)
+```
+
+
+```{r}
+
+# Load the HTML content from the website
+uncurl <- "https://unc.nil.store/"
+unchtml <- read_html(uncurl)
+
+# Find the specific parent node
+unc_parent_node <- unchtml %>%
+  html_node(xpath = "//div[contains(@class, 'nested-mobile-menu-heading-container athlete')]//following-sibling::div[@class='nested-mobile-menu']")
+
+# Extract all the nested li elements within the parent node
+unc_nested_li_elements <- unc_parent_node %>%
+  html_nodes("ul > li > ul > li")
+
+# Extract the athlete names and URLs from the nested li elements
+unc_athletes <- unc_nested_li_elements %>%
+  html_nodes("a") %>%
+  {data.frame(
+    name = html_text(., trim = TRUE),
+    site = paste0("https://unc.nil.store", html_attr(., "href")),
+    school = "North Carolina"
+    )}
+
+
+```
+
+

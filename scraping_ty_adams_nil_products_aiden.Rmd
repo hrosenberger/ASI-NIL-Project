@@ -1,0 +1,61 @@
+---
+title: "Scraping Ty Adams NIL Products"
+author: "Aidan Hughes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+
+# Load necessary libraries
+library(rvest)
+library(dplyr)
+
+```
+
+```{r}
+# Define the URL
+adamsurl <- "https://unc.nil.store/collections/ty-adams-11"
+
+# Read the HTML content from the URL
+adamswebpage <- read_html(adamsurl)
+
+# Extract product names and prices using CSS selectors
+adams_product_elements <- adamswebpage %>% html_nodes("div h3 a") %>% html_text(trim = TRUE)
+adams_price_elements <- adamswebpage %>% html_nodes("span.price-item.price-item--regular") %>% html_text(trim = TRUE)
+
+# Combine the product names and prices into a data frame
+adams_products <- data.frame("Product Name" = adams_product_elements, "Price" = adams_price_elements)
+
+```
+
+```{r}
+# Define the URL
+bacoturl <- "https://unc.nil.store/collections/armando-bacot-5"
+
+# Read the HTML content from the URL
+bacotwebpage <- read_html(bacoturl)
+
+# Extract product names and prices using CSS selectors
+bacot_product_elements <- bacotwebpage %>% html_nodes("div h3 a") %>% html_text(trim = TRUE)
+bacot_price_elements <- bacotwebpage %>% html_nodes("span.price-item.price-item--regular") %>% html_text(trim = TRUE)
+
+# Combine the product names and prices into a data frame
+bacot_products <- data.frame("Product Name" = bacot_product_elements, "Price" = bacot_price_elements)
+```
+
+```{r}
+write.csv(products, "../data/unc_nil_products.csv")
+
+```
+
+```{r}
+
+```
+
