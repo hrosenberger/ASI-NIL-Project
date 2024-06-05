@@ -43,4 +43,298 @@ unc_athletes <- unc_nested_li_elements %>%
 
 ```
 
+```{r}
+# Initialize a list to store the results
+gender_sport <- list()
+
+# Iterate over each row in the data frame
+```
+
+
+```{r}
+
+#IF I NEED TO I CAN MAKE THIS WORK 
+
+for (i in 1:nrow(schools_df_2)) {
+  name <- schools_df_2$name[i]
+  url <- trimws(schools_df_2$url[i])  # Remove any leading/trailing spaces
+  webpage <- read_html(url)
+  scraped_data <- html_text(html_nodes(webpage, xpath= "//div[@class='nested-mobile-menu']//li//a[@class='color-text']/@href"))
+  gender_sport[[i]] <- list(name = name, url = url, data = scraped_data)
+}
+
+# Combine the list of results into a single data frame
+gender_sport_df <- bind_rows(gender_sport)
+
+# Print the results
+print(gender_sport_df)
+```
+```{r}
+
+library(rvest)
+library(dplyr)
+
+schools_df3 <- schools_df_2 %>%
+  slice(-58) %>%
+  slice(-18)
+
+schools_df3[1, 2] = "https://arkansas.nil.store"
+  
+
+mens_results <- list()
+womens_results <- list()
+
+for (i in 1:nrow(schools_df3)) {
+  name <- schools_df3$name[i]
+  url <- trimws(schools_df3$url[i])  # Remove any leading/trailing spaces
+  webpage <- read_html(url)
+  
+  # Scrape Men's sports
+  mens_sports <- webpage %>%
+    html_nodes(".nested-mobile-menu li:contains(\"Men's\") li.only_link a.color-text") %>%
+    html_text(trim = TRUE)
+  
+  mens_results[[i]] <- data.frame(
+    name = name,
+    url = url,
+    sport = mens_sports,
+    gender = "Men's"
+  )
+  
+  # Scrape Women's sports
+  womens_sports <- webpage %>%
+    html_nodes(".nested-mobile-menu li:contains(\"Women's\") li.only_link a.color-text") %>%
+    html_text(trim = TRUE)
+  
+  womens_results[[i]] <- data.frame(
+    name = name,
+    url = url,
+    sport = womens_sports,
+    gender = "Women's"
+  )
+}
+
+# Combine men's and women's results into a single data frame
+combined_results <- bind_rows(mens_results) %>%
+  bind_rows(womens_results)
+```
+
+```{r}
+participating_sports <- combined_results %>%
+  group_by(name) %>%
+  summarize(
+    sport_count=n()
+  )
+```
+
+mens_womens <- combined_results %>%
+  group_by(gender) %>%
+  summarize(
+    sport_count=n(
+    )
+  )
+```{r}
+mens_womens <- combined_results %>%
+  group_by(gender) %>%
+  summarize(
+    sport_count=n(
+    )
+  )
+```
+
+```{r}
+gendered_sports <- combined_results %>%
+  group_by(name) %>%
+  summarise(
+    mens = sum(gender == "mens"),
+    womens = sum(gender == "womens"),
+    total = sum(mens + womens)
+  )
+```
+
+```{r}
+sport_types <- combined_results %>%
+  group_by(sport)%>%
+  summarize(
+    sport_count=n()
+  )
+```
+
+
+```{r}
+
+# Initialize an empty list to store results for each school
+all_results <- list()
+
+# Iterate over each school
+for (i in 1:nrow(schools_df3)) {
+  name <- schools_df3$name[i]
+  url <- trimws(schools_df3$url[i])  # Remove any leading/trailing spaces
+  webpage <- read_html(url)
+  
+  mens_sports <- webpage %>%
+    html_nodes(".nested-mobile-menu li:contains(\"Men's\") li.only_link a.color-text") %>%
+    html_text(trim = TRUE)
+  
+  womens_sports <- webpage %>%
+    html_nodes(".nested-mobile-menu li:contains(\"Women's\") li.only_link a.color-text") %>%
+    html_text(trim = TRUE)
+  
+  for (sport in unique(c(mens_sports, womens_sports))) {
+    is_mens_sport <- sport %in% mens_sports
+    is_womens_sport <- sport %in% womens_sports
+    
+    if (is_mens_sport) {
+      mens_prefix <- ifelse(is_womens_sport & is_mens_sport, "mens-", "")
+      sport_url_mens <- paste0(url, "/collections/", tolower(paste0(mens_prefix)), tolower(gsub(" ", "-", sport)))
+      all_results[[length(all_results) + 1]] <- data.frame(
+        name = name,
+        url = url,
+        sport = sport,
+        gender = "Men's",
+        sport_url = sport_url_mens
+      )
+    }
+    
+    if (is_womens_sport) {
+      womens_prefix <- ifelse(is_womens_sport & !(sport %in% c("Gymnastics", "Equestrian", "Softball")) & !(sport %in% mens_sports), "womens-", "")
+      sport_url_womens <- paste0(url, "/collections/", tolower(paste0(womens_prefix)), tolower(gsub(" ", "-", sport)))
+      all_results[[length(all_results) + 1]] <- data.frame(
+        name = name,
+        url = url,
+        sport = sport,
+        gender = "Women's",
+        sport_url = sport_url_womens
+      )
+    }
+  }
+}
+
+combined_results_2 <- do.call(rbind, all_results)
+  
+```
+# Print total number of rows
+print(nrow(combined_results))
+
+combined_results_2 <- combined_results_2 %>%
+  mutate(sport_url = gsub("&-", "", sport_url))
+  
+  
+```{r}
+womens_editing <- combined_results_2 %>%
+  filter(gender=="Women's") %>%
+  mutate(sport_url = gsub("&-", "", sport_url))
+
+mens_editing <- combined_results_2 %>%
+  filter(gender=="Men's") %>%
+  mutate(sport_url = gsub("&-", "", sport_url))
+```
+  
+  
+```{r}
+womens_editing$sport_url <- ifelse(
+  womens_editing$sport %in% c("Basketball", "Golf", "Track & Field", "Swimming & Diving", "Swimming", "Swim & Dive", "Tennis"),
+  gsub("(/collections/)", "\\1womens-", womens_editing$sport_url),
+  womens_editing$sport_url
+)
+  
+```
+  
+```{r}
+combined_results_final <- bind_rows(mens_editing) %>%
+  bind_rows(womens_editing)%>%
+  order(name)
+```
+```{r}
+combined_results_test1<- combined_results_final %>%
+  mutate(sub("collections",))
+```
+
+  
+```{r}
+library(dplyr)
+
+combined_results_test <- combined_results_final %>%
+  mutate(
+    sport_url = case_when(
+      name == "Baylor" ~ sub("/collections/", "/collections/bay-", sport_url),
+      name == "Belmont" ~ sub("/pages/", "/", sub("/collections/", "/collections/bel-belmont-", sport_url)),
+      name == "Boise State" ~ sub("/pages/", "/", sub("/collections/", "/collections/bsu-", sport_url)),
+      name == "BYU" ~ sub("/pages/", "/", sub("/collections/", "/collections/byu-", sport_url)),
+      name == "California Baptist" ~ sub("/pages/", "/", sub("/collections/", "/collections/calbaptist-", sport_url)),
+      name == "Boise State" ~ sub("/pages/", "/", sub("/collections/", "/collections/bsu-", sport_url)
+      
+      
+      TRUE ~ sport_url
+    )
+  )
+```
+
+
+
+```{r}
+#THIS IS WORKABLE! WILL JUST NEED TO REMOVE "SIGN UP NOW!" VALUES AFTER 
+library(rvest)
+library(httr)
+
+athlete_results <- list()
+error_urls <- c()  # Initialize a vector to store URLs with errors
+
+for (i in 1:nrow(testing)) {
+  name <- testing$name[i]
+  sport_url <- trimws(testing$sport_url[i])
+  
+  # Extract the sport name from the URL
+  sport_name <- gsub(".*\\/collections\\/", "", sport_url)
+  
+  # Attempt to read the webpage with headers and user agent
+  tryCatch({
+    response <- GET(sport_url, 
+                    headers = c("User-Agent" = "Mozilla/5.0"),
+                    timeout(30))
+    
+    if (status_code(response) == 200) {
+      webpage <- read_html(response)
+      
+      # Extract athlete names and remove duplicates
+      athlete_names <- webpage %>%
+        html_nodes(".card__heading a") %>%
+        html_text(trim = TRUE) %>%
+        unique()
+      
+      if (length(athlete_names) > 0) {
+        athlete_results[[i]] <- data.frame(
+          name = name,
+          athlete = athlete_names,
+          sport = sport_name
+        )
+      } else {
+        message(paste("No athlete names found for URL:", sport_url))
+      }
+    } else {
+      message(paste("Request failed with status code:", status_code(response), "for URL:", sport_url))
+    }
+    
+    # Add a delay between requests
+    Sys.sleep(1)
+  }, error = function(e) {
+    # If an error occurs, capture the URL with the error
+    error_urls <- c(error_urls, sport_url)
+    message(paste("Error occurred with URL:", sport_url))
+    message(paste("Error message:", e$message))
+  })
+}
+
+# Combine results into a single data frame
+if (length(athlete_results) > 0) {
+  final_results <- do.call(rbind, athlete_results)
+} else {
+  message("No results found.")
+  final_results <- NULL
+}
+
+```
+
+
+```
 
