@@ -78,6 +78,7 @@ Next, I used that base (and some other base code from Aidan and Rob as a startin
 schools_df_2 <- schools_df %>%
   slice(-25)
 
+
 # Initialize a list to store the results
 scraped_results <- list()
 

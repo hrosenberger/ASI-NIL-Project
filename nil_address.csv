@@ -1,0 +1,66 @@
+,Common Name,Number_Athletes,School,City,State,full_address,geo.lon,geo.lat,conference,subdivision,
+2,Arkansas,229,UniversityÂ ofÂ Arkansas,Fayetteville,AR,"Fayetteville, AR",-94.16058,36.06266,Public,FBS,SoutheasternÊConference
+3,Auburn,216,AuburnÂ University,Auburn,AL,"Auburn, AL",-85.48078,32.60986,Public,FBS,SoutheasternÊConference
+4,BYU,79,BrighamÂ YoungÂ University,Provo,UT,"Provo, UT",-111.65853,40.23384,Private,FBS,BigÊ12ÊConference
+5,Baylor,226,BaylorÂ University,Waco,TX,"Waco, TX",-97.14667,31.54933,Private,FBS,BigÊ12ÊConference
+6,Belmont,87,BelmontÂ University,Nashville,TN,"Nashville, TN",-86.7816,36.16266,Private,Non-football,MissouriÊValleyÊConference
+7,BoiseÂ State,313,BoiseÂ StateÂ University,Boise,ID,"Boise, ID",-116.20231,43.61502,Public,FBS,MountainÊWestÊConference
+8,CaliforniaÂ Baptist,127,CaliforniaÂ BaptistÂ University,Riverside,CA,"Riverside, CA",-117.37549,33.9806,Private,Non-football,WesternÊAthleticÊConference
+9,Clemson,93,ClemsonÂ University,Clemson,SC,"Clemson, SC",-82.83737,34.68344,Public,FBS,AtlanticÊCoastÊConference
+10,Colorado,215,UniversityÂ ofÂ ColoradoÂ Boulder,Boulder,CO,"Boulder, CO",-105.27055,40.01499,Public,FBS,Pac-12ÊConference
+11,Creighton,64,CreightonÂ University,Omaha,NE,"Omaha, NE",-95.9345,41.25654,Private,Non-football,BigÊEastÊConference
+12,Dayton,150,UniversityÂ ofÂ Dayton,Dayton,OH,"Dayton, OH",-84.19161,39.75895,Private,FCS,AtlanticÊ10ÊConference
+13,DePaul,80,DePaulÂ University,Chicago,IL,"Chicago, IL",-87.6298,41.87811,Private,Non-football,BigÊEastÊConference
+14,Duke,106,DukeÂ University,Durham,NC,"Durham, NC",-78.89862,35.99403,Private,FBS,AtlanticÊCoastÊConference
+15,Duquesne,128,DuquesneÂ UniversityÂ ofÂ theÂ HolyÂ Spirit,Pittsburgh,PA,"Pittsburgh, PA",-79.99589,40.44062,Private,FCS,AtlanticÊ10ÊConference
+16,ETSU,26,EastÂ TennesseeÂ StateÂ University,JohnsonÂ City,TN,"JohnsonÂ City, TN",-82.35347,36.31344,Public,FCS,SouthernÊConference
+17,EastÂ Carolina,37,EastÂ CarolinaÂ University,Greenville,NC,"Greenville, NC",-77.36635,35.61266,Public,FBS,AmericanÊAthleticÊConference
+18,FGCU,45,FloridaÂ GulfÂ CoastÂ University,FortÂ Myers,FL,"FortÂ Myers, FL",-81.87231,26.64063,Public,Non-football,AtlanticÊSunÊConference
+19,Florida,165,UniversityÂ ofÂ Florida,Gainesville,FL,"Gainesville, FL",-82.325,29.65196,Public,FBS,SoutheasternÊConference
+20,FloridaÂ State,116,FloridaÂ StateÂ University,Tallahassee,FL,"Tallahassee, FL",-84.28062,30.43818,Public,FBS,AtlanticÊCoastÊConference
+21,Georgetown,202,GeorgetownÂ University,Washington,DC,"Washington, DC",-77.03687,38.90719,Private,FCS,BigÊEastÊConference
+22,GeorgiaÂ Southern,100,GeorgiaÂ SouthernÂ University,Statesboro,GA,"Statesboro, GA",-81.78317,32.44879,Public,FBS,SunÊBeltÊConference
+23,Gonzaga,95,GonzagaÂ University,Spokane,WA,"Spokane, WA",-117.42353,47.65797,Private,Non-football,WestÊCoastÊConference
+24,Houston,25,UniversityÂ ofÂ Houston,Houston,TX,"Houston, TX",-95.3698,29.76043,Public,FBS,BigÊ12ÊConference
+25,Indiana,165,IndianaÂ UniversityÂ Bloomington,Bloomington,IN,"Bloomington, IN",-86.52639,39.16533,Public,FBS,BigÊTenÊConference
+26,Iowa,179,StateÂ UniversityÂ ofÂ Iowa,IowaÂ City,IA,"IowaÂ City, IA",-91.53462,41.65783,Public,FBS,BigÊTenÊConference
+27,IowaÂ State,114,IowaÂ StateÂ UniversityÂ ofÂ ScienceÂ andÂ Technology,Ames,IA,"Ames, IA",-93.63191,42.03078,Public,FBS,BigÊ12ÊConference
+28,LSU,128,LouisianaÂ StateÂ UniversityÂ andÂ AgriculturalÂ andÂ MechanicalÂ College,BatonÂ Rouge,LA,"BatonÂ Rouge, LA",-91.18715,30.45147,Public,FBS,SoutheasternÊConference
+29,Louisiana,188,UniversityÂ ofÂ LouisianaÂ atÂ Lafayette,Lafayette,LA,"Lafayette, LA",-92.01984,30.22409,Public,FBS,SunÊBeltÊConference
+30,Louisville,183,UniversityÂ ofÂ Louisville,Louisville,KY,"Louisville, KY",-85.75846,38.25266,Public,FBS,AtlanticÊCoastÊConference
+31,Loyola,50,LoyolaÂ UniversityÂ Maryland,Baltimore,MD,"Baltimore, MD",-76.61219,39.29038,Private,Non-football,PatriotÊLeague
+32,Marquette,231,MarquetteÂ University,Milwaukee,WI,"Milwaukee, WI",-87.90647,43.0389,Private,Non-football,BigÊEastÊConference
+33,Maryland,163,"UniversityÂ ofÂ Maryland,Â CollegeÂ Park",CollegeÂ Park,MD,"CollegeÂ Park, MD",-76.93776,38.9897,Public,FBS,BigÊTenÊConference
+34,MichiganÂ State,178,MichiganÂ StateÂ University,EastÂ Lansing,MI,"EastÂ Lansing, MI",-84.48387,42.73698,Public,FBS,BigÊTenÊConference
+35,MississippiÂ State,167,MississippiÂ StateÂ UniversityÂ forÂ AgricultureÂ andÂ AppliedÂ Science,MississippiÂ State,MS,"MississippiÂ State, MS",-88.79039,33.45553,Public,FBS,SoutheasternÊConference
+36,Mizzou,226,UniversityÂ ofÂ Missouriâ€“Columbia,Columbia,MO,"Columbia, MO",-92.33407,38.95171,Public,FBS,SoutheasternÊConference
+37,Nebraska,244,UniversityÂ ofÂ Nebraskaâ€“Lincoln,Lincoln,NE,"Lincoln, NE",-96.70258,40.81366,Public,FBS,BigÊTenÊConference
+38,Nevada,108,"UniversityÂ ofÂ Nevada,Â Reno",Reno,NV,"Reno, NV",-119.81427,39.52992,Public,FBS,MountainÊWestÊConference
+39,NorthÂ Carolina,296,UniversityÂ ofÂ NorthÂ CarolinaÂ atÂ ChapelÂ Hill,ChapelÂ Hill,NC,"ChapelÂ Hill, NC",-79.05584,35.9132,Public,FBS,AtlanticÊCoastÊConference
+40,NorthÂ DakotaÂ State,169,NorthÂ DakotaÂ StateÂ UniversityÂ ofÂ AgricultureÂ andÂ AppliedÂ Sciences,Fargo,ND,"Fargo, ND",-96.7898,46.87719,Public,FCS,SummitÊLeague
+41,Northwestern,246,NorthwesternÂ University,Evanston,IL,"Evanston, IL",-87.6877,42.04507,Private,FBS,BigÊTenÊConference
+42,OhioÂ State,579,TheÂ OhioÂ StateÂ University,Columbus,OH,"Columbus, OH",-82.99879,39.96118,Public,FBS,BigÊTenÊConference
+43,OleÂ Miss,88,TheÂ UniversityÂ ofÂ Mississippi,University,MS,"University, MS",-89.53797,34.36625,Public,FBS,SoutheasternÊConference
+44,PennÂ State,164,TheÂ PennsylvaniaÂ StateÂ University,UniversityÂ Park,PA,"UniversityÂ Park, PA",-77.86531,40.8148,Public,FBS,BigÊTenÊConference
+45,Pitt,212,UniversityÂ ofÂ Pittsburgh,Pittsburgh,PA,"Pittsburgh, PA",-79.99589,40.44062,Public,FBS,AtlanticÊCoastÊConference
+46,Purdue,257,PurdueÂ University,WestÂ Lafayette,IN,"WestÂ Lafayette, IN",-86.90807,40.42587,Public,FBS,BigÊTenÊConference
+47,Rutgers,157,RutgersÂ Universityâ€“NewÂ Brunswick,NewÂ Brunswick,NJ,"NewÂ Brunswick, NJ",-74.45182,40.48622,Public,FBS,BigÊTenÊConference
+48,SDSU,124,SanÂ DiegoÂ StateÂ University,SanÂ Diego,CA,"SanÂ Diego, CA",-117.16108,32.71574,Public,FBS,MountainÊWestÊConference
+49,SaintÂ Louis,90,SaintÂ LouisÂ University,SaintÂ Louis,MO,"SaintÂ Louis, MO",-90.1994,38.627,Private,Non-football,AtlanticÊ10ÊConference
+50,StephenÂ F.Â Austin,125,StephenÂ F.Â AustinÂ StateÂ University,Nacogdoches,TX,"Nacogdoches, TX",-94.656,31.60395,Public,FCS,WesternÊAthleticÊConference
+51,Syracuse,138,SyracuseÂ University,Syracuse,NY,"Syracuse, NY",-76.14742,43.04812,Private,FBS,AtlanticÊCoastÊConference
+52,Temple,167,TempleÂ University,Philadelphia,PA,"Philadelphia, PA",-75.16522,39.95258,Public,FBS,AmericanÊAthleticÊConference
+53,Toledo,107,UniversityÂ ofÂ Toledo,Toledo,OH,"Toledo, OH",-83.53787,41.65281,Public,FBS,Mid-AmericanÊConference
+54,UCÂ Davis,210,"UniversityÂ ofÂ California,Â Davis",Davis,CA,"Davis, CA",-121.74052,38.54491,Public,FCS,BigÊWestÊConference
+55,UCLA,82,"UniversityÂ ofÂ California,Â LosÂ Angeles",LosÂ Angeles,CA,"LosÂ Angeles, CA",-118.24264,34.05491,Public,FBS,Pac-12ÊConference
+56,UConn,376,UniversityÂ ofÂ Connecticut,Storrs,CT,"Storrs, CT",-72.24952,41.80843,Public,FBS,BigÊEastÊConference
+57,Utah,140,UniversityÂ ofÂ Utah,SaltÂ LakeÂ City,UT,"SaltÂ LakeÂ City, UT",-111.89105,40.76078,Public,FBS,Pac-12ÊConference
+58,Virginia,216,UniversityÂ ofÂ Virginia,Charlottesville,VA,"Charlottesville, VA",-78.47668,38.02931,Public,FBS,AtlanticÊCoastÊConference
+59,VirginiaÂ Tech,74,VirginiaÂ PolytechnicÂ InstituteÂ andÂ StateÂ University,Blacksburg,VA,"Blacksburg, VA",-80.41394,37.22957,Public,FBS,AtlanticÊCoastÊConference
+60,WakeÂ Forest,240,WakeÂ ForestÂ University,Winston-Salem,NC,"Winston-Salem, NC",-80.24422,36.09986,Private,FBS,AtlanticÊCoastÊConference
+61,Washington,87,UniversityÂ ofÂ Washington,Seattle,WA,"Seattle, WA",-122.33285,47.60614,Public,FBS,Pac-12ÊConference
+62,WestÂ Virginia,195,WestÂ VirginiaÂ University,Morgantown,WV,"Morgantown, WV",-79.9559,39.62953,Public,FBS,BigÊ12ÊConference
+63,WesternÂ Kentucky,244,WesternÂ KentuckyÂ University,BowlingÂ Green,KY,"BowlingÂ Green, KY",-86.4808,36.96852,Public,FBS,ConferenceÊUSA
+64,WichitaÂ State,46,WichitaÂ StateÂ University,Wichita,KS,"Wichita, KS",-97.33005,37.68718,Public,Non-football,AmericanÊAthleticÊConference
+65,Winthrop,47,WinthropÂ University,RockÂ Hill,SC,"RockÂ Hill, SC",-81.02508,34.92487,Public,Non-football,BigÊSouthÊConference
+66,Xavier,158,XavierÂ University,Cincinnati,OH,"Cincinnati, OH",-84.51202,39.10312,Private,Non-football,BigÊEastÊConference

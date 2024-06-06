@@ -47,14 +47,6 @@ unc_athletes <- unc_nested_li_elements %>%
 # Initialize a list to store the results
 gender_sport <- list()
 
-# Iterate over each row in the data frame
-```
-
-
-```{r}
-
-#IF I NEED TO I CAN MAKE THIS WORK 
-
 for (i in 1:nrow(schools_df_2)) {
   name <- schools_df_2$name[i]
   url <- trimws(schools_df_2$url[i])  # Remove any leading/trailing spaces
@@ -64,11 +56,520 @@ for (i in 1:nrow(schools_df_2)) {
 }
 
 # Combine the list of results into a single data frame
-gender_sport_df <- bind_rows(gender_sport)
-
+gender_sport_df <- bind_rows(gender_sport) %>%
+  
 # Print the results
 print(gender_sport_df)
 ```
+```{r}
+# Assuming you already have the 'gender_sport_df' dataframe
+
+# Load the dplyr package
+library(dplyr)
+
+# Define a function to extract the desired portion of the URL
+extract_url <- function(url, data) {
+  parts <- unlist(strsplit(url, "/"))
+  combined_url <- paste(parts[1:3], collapse = "/")
+  return(paste0(combined_url, data))
+}
+
+# Apply the function to the 'url' column using mutate and rowwise
+gender_sport_df <- gender_sport_df %>%
+  rowwise() %>%
+  mutate(combined_url = extract_url(url, data))
+
+# Print the updated dataframe
+print(gender_sport_df, 590:595)
+
+```
+```{r}
+gender_sport_df <- gender_sport_df %>% filter(
+    !grepl("shop-by-sport$", combined_url) & 
+      !grepl("jerseys", combined_url) & 
+      !grepl("jersey", combined_url) & 
+      !grepl("sports", combined_url) & 
+      !grepl("onit-trading-card", combined_url) & 
+      !grepl("exclusive-drops", combined_url) & 
+      !grepl("postseason-apparel", combined_url) & 
+      !grepl("limited-releases", combined_url) & 
+      !grepl("limited-release", combined_url) & 
+      !grepl("trading-cards", combined_url) &
+      !grepl("bulldog-initiative", combined_url) &
+      !grepl("legacy", combined_url) & 
+      !grepl("tees", combined_url) &
+      !grepl("dawg-mentality-collection", combined_url) &
+      !grepl("big-red-helmet-collection", combined_url) &
+      !grepl("future", combined_url) &
+      !grepl("releases", combined_url) &
+      !grepl("volleyball-day", combined_url) &
+      !grepl("jackets", combined_url) &
+      !grepl("locker-room", combined_url) &
+      !grepl("legacy", combined_url) &
+      !grepl("merch", combined_url) &
+      !grepl("coming-soon", combined_url) &
+      !grepl("https://nil.shop/search", combined_url) &
+      !grepl("collective", combined_url) &
+      !grepl("search", combined_url) &
+      !grepl("champions", combined_url) &
+       !grepl("shirseys", combined_url) &
+       !grepl("https://nil.store/pages/pitt/", combined_url) &
+       !grepl("champion", combined_url) &
+       !grepl("four", combined_url) &
+       !grepl("eight", combined_url) &
+      !grepl("sixteen", combined_url) &
+      !grepl("stop", combined_url) &
+      !grepl("apparel", combined_url) &
+      !grepl("raglan", combined_url) &
+      !grepl("https://nil.store/pages/baylor/pages/baylor", combined_url) &
+      url!= combined_url &
+      substr(combined_url, nchar(combined_url), nchar(combined_url)) != "/" &
+      substr(combined_url, nchar(combined_url), nchar(combined_url)) != "#"
+      )
+```
+
+```{r}
+
+library(dplyr)
+
+# Create the third dataframe athlete_urls
+athlete_urls <- anti_join(gender_sport_df, all_sport_pages, by = "combined_url")
+
+# View the resulting dataframe
+print(athlete_urls)
+
+# Define the row indices to be removed
+rows_to_remove <- c(9907, 9662, 9574, 9516, 9463, 9384, 9328:9330, 9301, 9197, 
+                    9138, 9088, 9034, 8490, 8429, 8367, 8297, 8215, 8167, 8106, 
+                    7004, 5293, 5292, 5265, 5182, 3615, 3614, 3545, 3422:3424, 
+                    3126:3128, 2740, 2741, 2492, 2209, 2210, 2179:2181, 2136:2141, 
+                    2097, 2006, 1877, 1818, 1817, 1816, 1767, 1715, 1662, 1242, 
+                    645, 578, 516, 453)
+
+# Remove the specified rows from the dataframe
+athlete_urls <- athlete_urls[-rows_to_remove, ]
+
+# View the resulting dataframe
+print(athlete_urls)
+```
+
+Extracting names 
+```{r}
+
+
+# Create the new column athlete_ext, remove numbers, and replace hyphens with spaces
+athlete_urls <- athlete_urls %>%
+  mutate(athlete_ext = str_extract(combined_url, "[^/]+$")) %>%
+  mutate(athlete_ext = gsub("[0-9]", "", athlete_ext)) %>%
+  mutate(athlete_ext = gsub("-", " ", athlete_ext)) %>%
+   mutate(athlete_ext = str_to_title(athlete_ext))
+
+# View the resulting dataframe
+print(athlete_urls)
+
+
+```
+Converting name.
+```{r}
+
+
+```
+
+
+```{r}
+# Assuming your data frame is named 'scraped_results_df' and the column with names is 'data'
+# Assuming your data frame is named 'scraped_results_df' and the column with names is 'data'
+# Install and load necessary packages
+
+library(tidyr)
+
+# Sample data frame for testing
+
+# Use the separate function to split the 'data' column into 'Lastname' and 'Firstname'
+scraped_results_df <- scraped_results_df %>%
+  separate(data, into = c("Lastname", "Firstname"), sep = ",\\s*")
+```
+
+```{r}
+
+library(stringi)
+
+# Function to format names
+format_names <- function(firstname, lastname) {
+  # Replace apostrophes with hyphens
+  firstname <- gsub("'", "-", firstname)
+  firstname <- gsub("’", "-", firstname)
+  lastname <- gsub("'", "-", lastname)
+  lastname <- gsub("’", "-", lastname)
+  # Replace accented characters with non-accented equivalents and convert to lowercase
+  firstname <- tolower(stri_trans_general(firstname, "Latin-ASCII"))
+  lastname <- tolower(stri_trans_general(lastname, "Latin-ASCII"))
+  # Join two-word values with a hyphen
+  firstname_parts <- strsplit(firstname, " ")[[1]]
+  lastname_parts <- strsplit(lastname, " ")[[1]]
+  firstname <- paste(firstname_parts, collapse = "-")
+  lastname <- paste(lastname_parts, collapse = "-")
+  # Combine firstname and lastname with a hyphen
+  matching_part <- paste(firstname, lastname, sep = "-")
+  return(matching_part)
+}
+
+# Create the 'matching_part' column
+scraped_results_df <- scraped_results_df %>%
+  rowwise() %>%
+  mutate(matching_part = format_names(Firstname, Lastname))
+
+# Print the final dataframe
+print(scraped_results_df)
+
+
+```
+
+```{r}
+athletes_to_use <- scraped_results_df %>%
+  select(c("name","Firstname","Lastname", "matching_part"))
+
+gender_sport_df <- gender_sport_df %>%
+  select(c("name", "url","data","combined_url"))
+```
+
+```{r}
+# Preprocess the columns to extract the shared piece
+# Initialize an empty dataframe to store the merged results
+
+matched_rows_list <- vector("list", length = nrow(athletes_to_use))
+
+# Iterate through each row in scraped_results_df
+for (i in 1:nrow(athletes_to_use)) {
+  # Extract the shared piece from the matching-part column in scraped_results_df
+  shared_piece <- athletes_to_use$matching_part[i]
+  
+  # Find matching rows in gender_sport_df based on the extracted shared piece
+  matching_rows <- gender_sport_df[grepl(shared_piece, gender_sport_df$combined_url), ]
+  
+  # Ensure that the entire shared piece is found in the URLs
+  matching_rows <- matching_rows[grepl(paste0("\\b", shared_piece, "\\b"), matching_rows$combined_url), ]
+  
+  # Append matching rows to the list
+  matched_rows_list[[i]] <- matching_rows
+}
+
+# Add the list column to scraped_results_df
+athletes_to_use$matched_rows <- matched_rows_list
+```
+
+```{r}
+library(tidyr)
+
+athletes_to_use <- athletes_to_use%>%
+    unnest_wider(matched_rows, names_sep = "_")
+
+```
+
+
+```{r}
+print("Position of missing values ")
+which(is.n(athletes_to_use$matched_rows_combined_url))
+ 
+# count total missing values 
+print("Count of total missing values  ")
+sum(is.na(athletes_to_use$matched_rows_combined_url))
+```
+
+
+```{r}
+library(rvest)
+library(dplyr)
+
+library(rvest)
+library(dplyr)
+
+mens_sport <- list()
+womens_sport <- list()
+
+for (i in 1:nrow(schools_df_2)) {
+  name <- schools_df_2$name[i]
+  url <- trimws(schools_df_2$url[i])  # Remove any leading/trailing spaces
+  webpage <- read_html(url)
+  
+  mens_teams <- webpage %>%
+    html_nodes("div.nested-mobile-menu li:contains(\"Men's\") ul li") %>%
+    html_text() %>%
+    trimws()  # Remove leading/trailing spaces from team names
+  
+  womens_teams <- webpage %>%
+    html_nodes("div.nested-mobile-menu li:contains(\"Women's\") ul li") %>%
+    html_text() %>%
+    trimws()  # Remove leading/trailing spaces from team names
+  
+  mens_sport[[i]] <- data.frame(name = name, url = url, team = mens_teams, stringsAsFactors = FALSE)
+  womens_sport[[i]] <- data.frame(name = name, url = url, team = womens_teams, stringsAsFactors = FALSE)
+}
+
+# Combine the list of results into separate data frames for men's and women's teams
+mens_sport_df <- bind_rows(mens_sport) %>%
+  filter(
+    !grepl("Florida Atlantic", name) & 
+    !grepl("Utah State", name)
+  )
+
+womens_sport_df <- bind_rows(womens_sport) %>%
+  filter(
+    !grepl("Florida Atlantic", name) & 
+    !grepl("Utah State", name)
+  )
+
+# Perform a full join to combine the men's and women's teams
+testing_urls_df <- full_join(mens_sport_df, womens_sport_df, by = c("name", "url"), suffix = c("_mens", "_womens"))
+
+
+
+```
+
+
+```{r}
+
+
+
+```
+```{r}
+
+```
+
+
+
+```{r}
+library(rvest)
+library(dplyr)
+library(tidyr)
+
+# Initialize a list to store the results
+crying_if_this_works <- list()
+
+for (i in 1:nrow(schools_df_2)) {
+  name <- schools_df_2$name[i]
+  url <- trimws(schools_df_2$url[i])  # Remove any leading/trailing spaces
+  
+  # Remove trailing slash from the URL if present
+  url <- sub("/$", "", url)
+  
+  webpage <- read_html(url)
+  scraped_data <- html_text(html_nodes(webpage, xpath= "//div[@class='nested-mobile-menu']//li//a[@class='color-text']/@href"))
+  
+  # Combine url and scraped_data
+  combined_urls <- paste0(url, scraped_data)
+  
+  crying_if_this_works[[i]] <- data.frame(
+    name = name,
+    url=url,
+    combined_url = combined_urls,
+    stringsAsFactors = FALSE
+  )
+}
+
+# Combine the list of results into a single data frame
+crying_if_this_works_df <- bind_rows(crying_if_this_works) %>%
+  filter(
+    !grepl("shop-by-sport$", combined_url) & 
+      !grepl("jerseys", combined_url) & 
+      !grepl("jersey", combined_url) & 
+      !grepl("sports", combined_url) & 
+      !grepl("onit-trading-card", combined_url) & 
+      !grepl("exclusive-drops", combined_url) & 
+      !grepl("postseason-apparel", combined_url) & 
+      !grepl("limited-releases", combined_url) & 
+      !grepl("limited-release", combined_url) & 
+      !grepl("trading-cards", combined_url) &
+      !grepl("bulldog-initiative", combined_url) &
+      !grepl("legacy", combined_url) & 
+      !grepl("tees", combined_url) &
+      !grepl("dawg-mentality-collection", combined_url) &
+      !grepl("big-red-helmet-collection", combined_url) &
+      !grepl("future", combined_url) &
+      !grepl("releases", combined_url) &
+      !grepl("volleyball-day", combined_url) &
+      !grepl("jackets", combined_url) &
+      !grepl("locker-room", combined_url) &
+      !grepl("legacy", combined_url) &
+      !grepl("merch", combined_url) &
+      !grepl("coming-soon", combined_url) &
+      !grepl("https://nil.shop/search", combined_url) &
+      !grepl("collective", combined_url) &
+      !grepl("search", combined_url) &
+      !grepl("champions", combined_url) &
+       !grepl("shirseys", combined_url) &
+       !grepl("https://nil.store/pages/pitt/", combined_url) &
+       !grepl("champion", combined_url) &
+       !grepl("four", combined_url) &
+       !grepl("eight", combined_url) &
+      !grepl("sixteen", combined_url) &
+      !grepl("stop", combined_url) &
+      !grepl("apparel", combined_url) &
+      !grepl("raglan", combined_url) &
+      !grepl("https://nil.store/pages/baylor/pages/baylor", combined_url) &
+      url!= combined_url &
+      substr(combined_url, nchar(combined_url), nchar(combined_url)) != "/" &
+      substr(combined_url, nchar(combined_url), nchar(combined_url)) != "#"
+      )
+```
+
+```{r}
+clean_all_urls <- crying_if_this_works_df %>%
+   mutate(combined_url = sub("/pages/", "/", combined_url))
+  
+
+```
+
+```{r}
+# Separate sport pages and athlete pages
+sport_pages <- 
+  
+athlete_pages <-
+```
+
+HERE WE GO AGAIN!!
+```{r}
+url <- "https://unc.nil.store/"
+html <- read_html(url)
+
+mens_sports <- html %>%
+    html_nodes(".nested-mobile-menu li:contains(\"Men's\") li.only_link a.color-text") %>%
+    html_attr("href")
+```
+
+```{r}
+library(tidyverse)
+write_csv(schools_df_2, "schools_df_2.csv")
+```
+
+```{r}
+library(tidyr)
+library(tidyverse)
+
+schools_df_2 <- schools_df_2 %>%
+  slice(-58) %>%
+  slice(-18)
+```
+
+```{r}
+
+mens_sports_df <- list()
+
+for (i in 1:nrow(schools_df_2)) {
+  name <- schools_df_2$name[i]
+  url <- trimws(schools_df_2$url[i])
+  
+  tryCatch({
+    html <- read_html(url)
+    mens_sports <- html %>%
+      html_nodes(".nested-mobile-menu li:contains(\"Men's\") li.only_link a.color-text") %>%
+      html_attr("href")
+    
+    if (length(mens_sports) > 0) {
+      mens_sports_df[[name]] <- mens_sports
+    } else {
+      mens_sports_df[[name]] <- NA
+    }
+  }, error = function(e) {
+    mens_sports_df[[name]] <- NA
+    warning(paste("Error occurred for", name, ":", e$message))
+  })
+}
+
+# Unpack the list column and convert to a DataFrame
+mens_sports_df <- mens_sports_df %>%
+  enframe(name = "name", value = "mens_sports") %>%
+  unnest(mens_sports)
+
+# Join with the schools_df_2 DataFrame to include the base URL
+mens_sports_df <- mens_sports_df %>%
+  left_join(schools_df_2, by = "name") %>%
+  mutate(gender = "Men's")
+
+# Print the resulting DataFrame
+print(mens_sports_df)
+
+  
+```
+
+```{r}
+womens_sports_df <- list()
+
+for (i in 1:nrow(schools_df_2)) {
+  name <- schools_df_2$name[i]
+  url <- trimws(schools_df_2$url[i])
+  
+  tryCatch({
+    html <- read_html(url)
+    womens_sports <- html %>%
+      html_nodes(".nested-mobile-menu li:contains(\"Women's\") li.only_link a.color-text") %>%
+      html_attr("href")
+    
+    if (length(mens_sports) > 0) {
+      womens_sports_df[[name]] <- womens_sports
+    } else {
+      womens_sports_df[[name]] <- NA
+    }
+  }, error = function(e) {
+    womens_sports_df[[name]] <- NA
+    warning(paste("Error occurred for", name, ":", e$message))
+  })
+}
+
+# Unpack the list column and convert to a DataFrame
+womens_sports_df <- womens_sports_df %>%
+  enframe(name = "name", value = "womens_sports") %>%
+  unnest(womens_sports) 
+
+# Join with the schools_df_2 DataFrame to include the base URL
+womens_sports_df <- womens_sports_df %>%
+  left_join(schools_df_2, by = "name") %>%
+  mutate(gender = "Women's")
+
+# Print the resulting DataFrame
+print(womens_sports_df)
+
+```
+
+  
+```{r}
+library(dplyr)
+
+colnames(mens_sports_df) <- c("school", "sport_url", "main_url", "gender")
+colnames(womens_sports_df) <- c("school", "sport_url", "main_url", "gender")
+
+
+# Join the men's and women's sports DataFrames and add a gender column
+all_sports_df <- bind_rows(
+  mens_sports_df %>% mutate(gender = "Men's"),
+  womens_sports_df %>% mutate(gender = "Women's")
+)
+
+# Print the resulting DataFrame
+print(all_sports_df)
+```
+
+```{r}
+# Load the dplyr package
+library(dplyr)
+
+# Define a function to extract the desired portion of the URL
+extract_url <- function(main_url, sport_url) {
+  parts <- unlist(strsplit(main_url, "/"))
+  combined_url <- paste(parts[1:3], collapse = "/")
+  return(paste0(combined_url, sport_url))
+}
+
+# Apply the function to the 'url' column using mutate and rowwise
+all_sport_pages <- all_sports_df %>%
+  rowwise() %>%
+  mutate(combined_url = extract_url(main_url, sport_url))
+
+# Print the updated dataframe
+print(all_sport_pages)
+```
+
+
 ```{r}
 
 library(rvest)
@@ -79,14 +580,21 @@ schools_df3 <- schools_df_2 %>%
   slice(-18)
 
 schools_df3[1, 2] = "https://arkansas.nil.store"
+
+schools_df3 <-schools_df3 %>%
+  mutate(url = sub("/pages/", "/collections/", url))
+```
   
+```{r}
+library(rvest)
+library(dplyr)
 
 mens_results <- list()
 womens_results <- list()
 
-for (i in 1:nrow(schools_df3)) {
-  name <- schools_df3$name[i]
-  url <- trimws(schools_df3$url[i])  # Remove any leading/trailing spaces
+for (i in 1:nrow(schools_df_2)) {
+  name <- schools_df_2$name[i]
+  url <- trimws(schools_df_2$url[i])  # Remove any leading/trailing spaces
   webpage <- read_html(url)
   
   # Scrape Men's sports
@@ -117,6 +625,10 @@ for (i in 1:nrow(schools_df3)) {
 # Combine men's and women's results into a single data frame
 combined_results <- bind_rows(mens_results) %>%
   bind_rows(womens_results)
+
+
+
+
 ```
 
 ```{r}
@@ -167,9 +679,9 @@ sport_types <- combined_results %>%
 all_results <- list()
 
 # Iterate over each school
-for (i in 1:nrow(schools_df3)) {
-  name <- schools_df3$name[i]
-  url <- trimws(schools_df3$url[i])  # Remove any leading/trailing spaces
+for (i in 1:nrow(schools_df_2)) {
+  name <- schools_df_2$name[i]
+  url <- trimws(schools_df_2$url[i])  # Remove any leading/trailing spaces
   webpage <- read_html(url)
   
   mens_sports <- webpage %>%
@@ -240,101 +752,5 @@ womens_editing$sport_url <- ifelse(
   
 ```
   
-```{r}
-combined_results_final <- bind_rows(mens_editing) %>%
-  bind_rows(womens_editing)%>%
-  order(name)
-```
-```{r}
-combined_results_test1<- combined_results_final %>%
-  mutate(sub("collections",))
-```
 
-  
-```{r}
-library(dplyr)
-
-combined_results_test <- combined_results_final %>%
-  mutate(
-    sport_url = case_when(
-      name == "Baylor" ~ sub("/collections/", "/collections/bay-", sport_url),
-      name == "Belmont" ~ sub("/pages/", "/", sub("/collections/", "/collections/bel-belmont-", sport_url)),
-      name == "Boise State" ~ sub("/pages/", "/", sub("/collections/", "/collections/bsu-", sport_url)),
-      name == "BYU" ~ sub("/pages/", "/", sub("/collections/", "/collections/byu-", sport_url)),
-      name == "California Baptist" ~ sub("/pages/", "/", sub("/collections/", "/collections/calbaptist-", sport_url)),
-      name == "Boise State" ~ sub("/pages/", "/", sub("/collections/", "/collections/bsu-", sport_url)
-      
-      
-      TRUE ~ sport_url
-    )
-  )
-```
-
-
-
-```{r}
-#THIS IS WORKABLE! WILL JUST NEED TO REMOVE "SIGN UP NOW!" VALUES AFTER 
-library(rvest)
-library(httr)
-
-athlete_results <- list()
-error_urls <- c()  # Initialize a vector to store URLs with errors
-
-for (i in 1:nrow(testing)) {
-  name <- testing$name[i]
-  sport_url <- trimws(testing$sport_url[i])
-  
-  # Extract the sport name from the URL
-  sport_name <- gsub(".*\\/collections\\/", "", sport_url)
-  
-  # Attempt to read the webpage with headers and user agent
-  tryCatch({
-    response <- GET(sport_url, 
-                    headers = c("User-Agent" = "Mozilla/5.0"),
-                    timeout(30))
-    
-    if (status_code(response) == 200) {
-      webpage <- read_html(response)
-      
-      # Extract athlete names and remove duplicates
-      athlete_names <- webpage %>%
-        html_nodes(".card__heading a") %>%
-        html_text(trim = TRUE) %>%
-        unique()
-      
-      if (length(athlete_names) > 0) {
-        athlete_results[[i]] <- data.frame(
-          name = name,
-          athlete = athlete_names,
-          sport = sport_name
-        )
-      } else {
-        message(paste("No athlete names found for URL:", sport_url))
-      }
-    } else {
-      message(paste("Request failed with status code:", status_code(response), "for URL:", sport_url))
-    }
-    
-    # Add a delay between requests
-    Sys.sleep(1)
-  }, error = function(e) {
-    # If an error occurs, capture the URL with the error
-    error_urls <- c(error_urls, sport_url)
-    message(paste("Error occurred with URL:", sport_url))
-    message(paste("Error message:", e$message))
-  })
-}
-
-# Combine results into a single data frame
-if (length(athlete_results) > 0) {
-  final_results <- do.call(rbind, athlete_results)
-} else {
-  message("No results found.")
-  final_results <- NULL
-}
-
-```
-
-
-```
-
+ 
