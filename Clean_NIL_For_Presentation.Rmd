@@ -117,13 +117,9 @@ by_school <- scraped_results_df %>%
     athletes = n())
 ```
 
-```{r}
-library(htmltools)
 
-HTML('<iframe title="More than 10,000 athletes across 65 schools involved in NIL on nil.store" aria-label="Map" id="datawrapper-chart-8CAGH" src="https://datawrapper.dwcdn.net/8CAGH/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="541" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
-</script>')
-
-```
+<iframe title="More than 10,000 athletes across 65 schools involved in NIL on nil.store" aria-label="Map" id="datawrapper-chart-8CAGH" src="https://datawrapper.dwcdn.net/8CAGH/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="541" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
+</script>
 
 
 Then, to add in some additional information about each school, I extracted a data table from Wikipedia about their Division 1 partner schools. By adapting and joining this information to my existing dataframe, I was able to start to get a bigger picture about the website. 
@@ -203,11 +199,10 @@ pubpriv_compared <- pubpriv %>%
 
 print(pubpriv_compared)
 ```
-```{r}
-HTML('<iframe title="More than 10,000 athletes across 65 schools involved in NIL on nil.store (Copy)" aria-label="Map" id="datawrapper-chart-yFDjP" src="https://datawrapper.dwcdn.net/yFDjP/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="580" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}());
-</script>')
+<iframe title="More than 10,000 athletes across 65 schools involved in NIL on nil.store (Copy)" aria-label="Map" id="datawrapper-chart-yFDjP" src="https://datawrapper.dwcdn.net/yFDjP/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="580" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}());
+</script>
 
-```
+
 
 Next, I looked at athletic conferences. I expected that the larger athletic conferences would be on top, and I was correct, but I was surprised that the Southeastern Conference (SEC) wasn't on top. The University of Arkansas is the only SEC school to be in the top 10 on the site for number of athletes. 
 
@@ -270,7 +265,7 @@ for (i in 1:nrow(schools_df_2)) {
 }
 
 # Combine the list of results into a single data frame
-gender_sport_df <- bind_rows(gender_sport) %>%
+gender_sport_df <- bind_rows(gender_sport)
   
 # Print the results
 head(gender_sport_df)
