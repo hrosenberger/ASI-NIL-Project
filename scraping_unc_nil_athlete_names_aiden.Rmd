@@ -570,20 +570,7 @@ print(all_sport_pages)
 ```
 
 
-```{r}
 
-library(rvest)
-library(dplyr)
-
-schools_df3 <- schools_df_2 %>%
-  slice(-58) %>%
-  slice(-18)
-
-schools_df3[1, 2] = "https://arkansas.nil.store"
-
-schools_df3 <-schools_df3 %>%
-  mutate(url = sub("/pages/", "/collections/", url))
-```
   
 ```{r}
 library(rvest)
@@ -752,5 +739,389 @@ womens_editing$sport_url <- ifelse(
   
 ```
   
+```{r}
+# Remove trailing spaces from the combined_url column
+all_sport_pages$combined_url <- trimws(all_sport_pages$combined_url, which = "right")
 
+# View the resulting dataframe
+print(all_sport_pages)
+```
+
+
+
+```{r}
+
+#she works but was being REAL slow
+
+library(rvest)
+library(tidyverse)
+
+# Create a new column for the sport
+all_sport_pages_2 <- all_sport_pages %>%
+  mutate(sport = NA_character_)
+
+# Extract sport from page title for each URL
+for (i in 1:nrow(all_sport_pages)) {
+  url <- trimws(all_sport_pages$combined_url[i])
+  
+  tryCatch({
+    html <- read_html(url)
+    
+    library(rvest)
+library(tidyverse)
+library(parallel)
+library(memoise)  # Add this line
+
+# Determine the number of cores to use
+num_cores <- detectCores() - 1  # Use all but one core
+
+# Memoize the read_html function
+memoised_read_html <- memoise(read_html)
+
+# Function to process a single row
+process_row <- function(row) {
+  tryCatch({
+    # Use memoised_read_html instead of read_html
+    html <- memoised_read_html(row$combined_url)
+    
+    sport <- html %>%
+      html_element("title") %>%
+      html_text() %>%
+      str_extract("^[^-]+") %>%
+      str_trim()
+    athletes <- html %>%
+      html_elements(".card__heading a") %>%
+      html_text() 
+    
+    tibble(school = row$school, sport = sport, athlete = athletes)
+  }, error = function(e) {
+    warning(paste("Error occurred for", row$school, ":", e$message))
+    tibble(school = row$school, sport = NA_character_, athlete = NA_character_)
+  })
+}
+
+# Process data in parallel
+sport_and_athlete_lists <- mclapply(
+  split(all_sport_pages, 1:nrow(all_sport_pages)),
+  process_row,
+  mc.cores = num_cores
+)
+
+# Combine results
+sport_and_athlete_df <- bind_rows(sport_and_athlete_lists)
+    
+```
+
+```{r}
+library(rvest)
+library(tidyverse)
+library(parallel)
+library(memoise)
+
+# Create a new column for the sport
+all_sport_pages <- all_sport_pages %>%
+  mutate(combined_url = trimws(combined_url),
+         sport = NA_character_)
+
+# Memoize the read_html function
+memoised_read_html <- memoise(read_html)
+
+# Function to extract sport from a URL
+extract_sport <- function(url) {
+  tryCatch({
+    html <- memoised_read_html(url)
+    
+    sport <- html %>%
+      html_element("title") %>%
+      html_text() %>%
+      str_extract("^[^-]+") %>%
+      str_trim()
+    
+    return(sport)
+  }, error = function(e) {
+    warning(paste("Error occurred for URL", url, ":", e$message))
+    return(NA_character_)
+  })
+}
+
+# Extract sport for each URL in parallel
+num_cores <- detectCores() - 1
+sports <- mclapply(all_sport_pages$combined_url, extract_sport, mc.cores = num_cores)
+
+# Add sports to all_sport_pages
+all_sport_pages$sport <- unlist(sports)
+
+# Function to process a single row for athletes
+process_row <- function(row) {
+  tryCatch({
+    html <- memoised_read_html(row$combined_url)
+    
+    athletes <- html %>%
+      html_elements(".card__heading a") %>%
+      html_text() 
+    
+    tibble(school = row$school, sport = row$sport, gender=row$gender, athlete = athletes)
+  }, error = function(e) {
+    warning(paste("Error occurred for", row$school, ":", e$message))
+    tibble(school = row$school, sport = row$sport, athlete = NA_character_)
+  })
+}
+
+# Process data in parallel to get athletes
+sport_and_athlete_lists <- mclapply(
+  split(all_sport_pages, 1:nrow(all_sport_pages)),
+  process_row,
+  mc.cores = num_cores
+)
+
+# Combine results
+sport_and_athlete_df <- bind_rows(sport_and_athlete_lists)
+```
+
+```{r}
+library(tidyverse)
+
+sport_and_athlete_df_cleaned <- sport_and_athlete_df %>%
+  # Clean up the sport column (keep this part as it was)
+  mutate(
+    sport = str_extract(sport, "^[^–—-]+"),  # Get text before "-", "–", or "—"
+    sport = str_remove_all(sport, "Men's|Women's"),  # Remove "Men's" or "Women's"
+    sport = str_remove_all(sport, school),  # Remove school name
+    sport = str_trim(sport)  # Trim whitespace
+  ) %>%
+  # Clean up the athlete column (updated part)
+  mutate(
+    athlete = str_remove(athlete, "\\|.*"),  # Remove "|" and everything after
+    athlete = str_remove_all(athlete, "#\\d+"),  # Remove "#" followed by digits
+    athlete = str_remove_all(athlete, "\\d+"),  # Remove all digits
+    athlete = str_remove_all(athlete, "[#]"),  # Remove any remaining "#"
+    athlete = str_trim(athlete),  # Trim whitespace
+    athlete = str_squish(athlete)  # Replace multiple spaces with a single space
+  ) %>%
+  # Remove "Sign Up Now!" and duplicates (keep this part as it was)
+  filter(
+    athlete != "Sign Up Now!"
+  ) %>%
+  distinct(school, sport, athlete) %>%
+  # Optional: arrange by school and sport for readability
+  arrange(school, sport)
+
+# View the first few rows to check the cleaning
+head(sport_and_athlete_df_cleaned)
+```
+
+```{r}
+library(tidyverse)
+
+# Get unique athletes from both dataframes
+scraped_athletes <- unique(scraped_results_df_cleaned$data)
+cleaned_athletes <- unique(sport_and_athlete_df_cleaned$athlete)
+
+# Find athletes in scraped data but not in cleaned data
+missing_athletes <- setdiff(scraped_athletes, cleaned_athletes)
+
+# View the missing athletes
+cat("Athletes in scraped data but not in cleaned data:\n")
+print(missing_athletes)
+
+# Optional: Get more context about these athletes
+context_for_missing <- scraped_results_df_cleaned %>%
+  filter(data %in% missing_athletes)
+
+cat("\nContext for missing athletes:\n")
+print(context_for_missing)
+```
+
+```{r}
+library(tidyverse)
+
+scraped_results_df_cleaned <- scraped_results_df %>%
+  mutate(
+    data = str_trim(data),  # Remove leading/trailing whitespace
+    data = case_when(
+      str_detect(data, ",") ~ {
+        # Split the name into parts
+        name_parts <- str_split(data, ", ", simplify = TRUE)
+        
+        # Recombine as "Firstname Lastname"
+        paste(name_parts[, 2], name_parts[, 1])
+      },
+      TRUE ~ data  # If there's no comma, keep the original
+    )
+  )
+
+# View the first few rows
+head(scraped_results_df_cleaned)
+```
+
+
+
+```{r}
+
+#THIS WORKS, JUST NAMES
+sport_and_athlete_df_2 <- list()
+for (i in 1:nrow(all_sport_pages)) {
+  name <- all_sport_pages$school[i]
+  url <- trimws(all_sport_pages$combined_url[i])
+  
+  tryCatch({
+    html <- read_html(url)
+    sport_and_athlete <- html %>%
+      html_elements(".card__heading a") %>%
+      html_text() 
+    
+    if (length(sport_and_athlete) > 0) {
+      sport_and_athlete_df_2[[i]] <- list(name = name, athlete = sport_and_athlete)
+    } else {
+      sport_and_athlete_df_2[[i]] <- list(name = name, athlete = NA)
+    }
+  }, error = function(e) {
+    sport_and_athlete_df_2[[i]] <- list(name = name, athlete = NA)
+    warning(paste("Error occurred for", name, ":", e$message))
+  })
+}
+
+# Unpack the list column and convert to a DataFrame
+sport_and_athlete_df_2 <- sport_and_athlete_df %>%
+  bind_rows()
+```
+
+```{r}
+library(rvest)
+library(tidyverse)
+
+sport_and_athlete_df <- list()
+for (i in 1:nrow(all_sport_pages)) {
+  school <- all_sport_pages$school[i]
+  url <- trimws(all_sport_pages$combined_url[i])
+  
+  tryCatch({
+    html <- read_html(url)
+    
+    # Extract sport from page title (assuming it's in the format "Sport - School Name")
+    sport <- html %>%
+      html_element("title") %>%
+      html_text() %>%
+      str_extract("^[^-]+") %>%
+      str_trim()
+    
+    athletes <- html %>%
+      html_elements(".card__heading a") %>%
+      html_text() 
+    
+    if (length(athletes) > 0) {
+      sport_and_athlete_df[[i]] <- tibble(school = school, gender = gender, sport = sport, athlete = athletes)
+    } else {
+      sport_and_athlete_df[[i]] <- tibble(school = school, gender = gender, sport = sport, athlete = NA_character_)
+    }
+  }, error = function(e) {
+    sport_and_athlete_df[[i]] <- tibble(school = school, sport = NA_character_, athlete = NA_character_)
+    warning(paste("Error occurred for", school, ":", e$message))
+  })
+}
+
+# Combine all tibbles into a single dataframe
+sport_and_athlete_df <- bind_rows(sport_and_athlete_df)
+```
  
+```{r}
+library(stringi)
+library(tidyverse)
+library('xml2')
+library(rvest)
+library(jsonlite)
+
+# Create an empty dataframe to store the scraped data
+product_df <- data.frame(name = character(),
+                         combined_url = character(),
+                         type = character(),
+                         title = character(),
+                         price = numeric(),
+                         stringsAsFactors = FALSE)
+
+# Loop through each URL
+for (i in 1:min(236, nrow(athlete_urls))) {
+  url <- athlete_urls$combined_url[i]
+  # Read the HTML content of the page
+  page <- read_html(url)
+  
+  # Extracting product details from the JavaScript object
+  json_data <- page %>%
+    html_nodes(xpath = '//script[contains(text(), "productVariants")]') %>%
+    html_text()
+  
+  # Extracting the JSON substring from the JavaScript code
+  json_data_clean <- gsub(".*?\\{.*\"productVariants\".*?\\}.*", "\\1", json_data, perl = TRUE)
+  
+  # Attempt to parse the cleaned JSON data
+  tryCatch({
+    # Parsing the cleaned JSON data
+    product_info <- fromJSON(json_data_clean)
+    
+    # Extracting relevant product details
+    product_subset <- data.frame(
+      name = athlete_urls$name[i],
+      combined_url = athlete_urls$combined_url[i],
+      type = sapply(product_info$productVariants, function(x) x$product$type),
+      title = sapply(product_info$productVariants, function(x) x$product$title),
+      price = sapply(product_info$productVariants, function(x) x$price$amount)
+    )
+    
+    # Append the product subset to the main dataframe
+    product_df <- bind_rows(product_df, product_subset)
+  }, error = function(e) {
+    # Print the error message
+    cat("Error parsing JSON data from URL:", url, "\n")
+    # Print the extracted JSON data to inspect
+    cat("Extracted JSON data:", json_data_clean, "\n")
+  })
+}
+
+```
+```{r}
+library(tidyverse)
+
+sport_and_athlete_df_cleaned <- sport_and_athlete_df %>%
+  # Clean up the sport column (keep this part as it was)
+  mutate(
+    sport = str_extract(sport, "^[^–—-]+"),  # Get text before "-", "–", or "—"
+    sport = str_remove_all(sport, "Men's|Women's"),  # Remove "Men's" or "Women's"
+    sport = str_remove_all(sport, school),  # Remove school name
+    sport = str_trim(sport)  # Trim whitespace
+  ) %>%
+  # Clean up the athlete column (updated part)
+  mutate(
+    athlete = str_remove(athlete, "\\|.*"),  # Remove "|" and everything after
+    athlete = str_remove_all(athlete, "#\\d+"),  # Remove "#" followed by digits
+    athlete = str_remove_all(athlete, "\\d+"),  # Remove all digits
+    athlete = str_remove_all(athlete, "[#]"),  # Remove any remaining "#"
+    athlete = str_trim(athlete),  # Trim whitespace
+    athlete = str_squish(athlete)  # Replace multiple spaces with a single space
+  ) %>%
+  # Remove "Sign Up Now!" and duplicates (keep this part as it was)
+  filter(
+    athlete != "Sign Up Now!"
+  ) %>%
+  distinct(school, sport, athlete, gender) %>%
+  # Optional: arrange by school and sport for readability
+  arrange(school, sport) %>%
+  select(gender, everything())
+
+
+```
+
+
+ For athletes on active rosters: 
+ 
+```{r}
+sports_participants <- sport_and_athlete_df_cleaned %>%
+  group_by(sports) %>%
+  summarize(
+    number_athletes = n()
+  )
+```
+ 
+```{r}
+athletes
+```
+
