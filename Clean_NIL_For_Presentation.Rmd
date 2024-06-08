@@ -46,7 +46,7 @@ Football was overwhelmingly the largest sport represented on the site, with more
 The Big 10 Conference had the most athlete participation, with more than 2300 athletes across 10 schools. There were also about 2.5 times more public schools represented on the site than private schools. [Click for more.](#conferences)
 
 #### 5. Future Work: Products and Prices 
-For each of the more than 10,000 athletes on the site, there can dozens of product options that vary in price, type, and quantity between athletes, schools and sports. That is data ripe for analysis within the context of my promotional products-based internship.[Click for more.](#products)
+For each of the more than 10,000 athletes on the site, there can dozens of product options that vary in price, type, and quantity between athletes, schools and sports. That is data ripe for analysis within the context of my promotional products-based internship. [Click for more.](#products)
 
 #### Let's get into it! 
 
@@ -61,8 +61,6 @@ library(stringr)
 ## Part 1
 
 ### School-level data
-
-<a id="schools"></a>
 
 First, I had to scrape the main website page to get the base url for each school's page. I used an adapted version of code from Rob and Aiden to do this. 
 
@@ -139,6 +137,8 @@ scraped_results_df <- bind_rows(scraped_results)
 # Print the results
 head(scraped_results_df)
 ```
+
+<a id="schools"></a>
 
 This dataframe then allowed me to do some preliminary analysis based on the number of athletes associated with each school. 
 
@@ -619,7 +619,6 @@ Based on some Googling, I believe this often indicated that those athletes who w
 
 #### Sport and Gender breakdowns. 
 
-<a id="gender"></a>
 <a id="sports"></a>
 
 This is where this gets interesting. 
@@ -652,6 +651,8 @@ Rifle, with 10 athletes
 Triathlon, with 8 athletes
 
 and Squash, with 2 athletes!
+
+<a id="gender"></a>
 
 However, when you split it up by individual men's / women's team, football (and baseball, to a lesser degree) still dominate the rankings for most athletes featured on the site — but the other sports shift around. 
 
@@ -757,6 +758,8 @@ Finally, this dataframe displays the number of athletes on each team, at each sc
 ## Part 4
 
 ### Products and Prices
+
+<a id="products"></a>
 
 Due to the many complications of scraping, I didn't have as much time to work with this data as I would have liked. However, I did develop code that works for scraping the full product list of one school, and all of its athletes (I think). Hopefully, that can be adapted to eventually scrape the full website, but for now, this works for a demonstration. 
 
