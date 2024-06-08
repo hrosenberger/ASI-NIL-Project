@@ -4,26 +4,27 @@ date: "2024-06-08"
 output: 
   html_document:
     theme: journal
-    toc: yes
-    toc_float:
-      collapsed: true
 ---
 
-# Schools, teams, gender, athletes and products on nil.store: An analysis of NIL data for college athletes"
+# Schools, teams, gender, athletes and products on nil.store: An analysis of NIL data for college athletes
 
-### AKA, the tale of a website that should definitely be redesigned but it's fine
+### AKA, someone really needs to redesign this website.
+
+### By Hannah Rosenberger
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+<div style="text-align: center;">
+  <img src="nilscreenshot.jpg" alt="Description of the photo" style="width: 100%; max-width: 800px; margin: 0 auto;">
+</div>
+
 In light of the NCAA's recent agreement that Power 5 conference schools may be able to directly pay their student athletes for the first time, athlete compensation and Name-Image-Likeness initiatives will only continue to be at the forefront of the college athletics conversation. In addition to contracts with individual businesses, screenprinting companies like https://nil.store offer an opportunity for primarily Division 1 athletes across sports to quickly and directly profit from NIL merchandise. 
 
-The site does not represent the total NIL apparel market for college athletes. Many of the most prominent names in the NIL conversation outside of specifically merchandise, like former UNC women's basketball player Deja Kelly and LSU gymnast Olivia Dunne, aren't on the website. Particularly for larger conferences (like the SEC, which is only represented on the site by 7 of its 14 member schools), more well-endowed programs (like Duke University, which falls far below its athletic competitors in athlete participation on the site), or more well-established named (like Kelly and Dunne), external sites like nil.store may not be necessary for these programs to wrangle deals for their athletes. 
+With more than 350 Division 1 schools and 190,000 participating athletes in the United States, The site does not represent the total NIL apparel market for college athletes. Many of the most prominent names in the NIL conversation outside of specifically merchandise, like former UNC women's basketball player Deja Kelly and LSU gymnast Olivia Dunne, aren't on the website. Particularly for larger conferences (like the SEC, which is only represented on the site by 7 of its 14 member schools), more well-endowed programs (like Duke University, which falls far below its athletic competitors in athlete participation on the site), or more well-established named (like Kelly and Dunne), external sites like nil.store may not be necessary for these programs to wrangle deals for their athletes. 
 
-However, a site like nil.store could also be an opportunity for athletes in less funded sports (like swimming, for example) to enhance their NIL brand without the need for a direct company deal. In this way, composite online stores like the nil.store site can amass a large online marketplace with hundreds of thousands of products. 
-
-With more than 10,000 athletes currently represented across 65 schools (with 3 more soon to be added), there is large potential for business and a huge network of promotional product for these athletes. 
+However, with more than 10,000 athletes currently represented across 65 schools (with 3 more soon to be added), there is large potential for business and a huge network of promotional product for these athletes. A site like nil.store could also be an opportunity for athletes in less funded sports (like swimming, for example) to enhance their NIL brand without the need for a direct company deal. In this way, composite online stores like the nil.store site can amass a large online marketplace with hundreds of thousands of products. 
 
 In this project, I will analyze the schools, athletes, genders, and sports more represented on nil.store, as well as what products are most common and how pricing varies between the above categories. Depending on my findings throughout the rest of the week, I can imagine several different stories that my output data could lead me to. 
 
@@ -33,19 +34,19 @@ In this project, I will analyze the schools, athletes, genders, and sports more 
 </script>
 
 #### 1. Schools 
-Ohio State has the largest amount of student-athletes represented on the site with almost 600, with UConn and Boise State rounding out the top three with 376 and 313 athletes, respectively. For more:
+Ohio State has the largest amount of student-athletes represented on the site with almost 600, with UConn and Boise State rounding out the top three with 376 and 313 athletes, respectively. [Click for more.](#schools)
 
 #### 2. Gender Balance 
-There are more women's teams than men's represented on nil.store, across the 65 schools on the site. However, there are significantly more individual male athletes on the site than women. For more:
+There are more women's teams than men's represented on nil.store, across the 65 schools on the site. However, there are significantly more individual male athletes on the site than women. [Click for more.](#gender)
 
 #### 3. Sports
-Football was overwhelmingly the largest sport represented on the site, with more than double the number of athletes of the number 2 sport, basketball. The third-largest sport overall on the site was baseball; however, if you break the teams down by gender, the top sports shift to 1) football 2) baseball 3) women's soccer. For more: 
+Football was overwhelmingly the largest sport represented on the site, with more than double the number of athletes of the number 2 sport, basketball. The third-largest sport overall on the site was baseball; however, if you break the teams down by gender, the top sports shift to 1) football 2) baseball 3) women's soccer. [Click for more.](#sports)
 
 #### 4. Conferences and Public/Private Schools
-The Big 10 Conference had the most athlete participation, with more than 2300 athletes across 10 schools. There were also about 2.5 times more public schools represented on the site than private schools. For more:
+The Big 10 Conference had the most athlete participation, with more than 2300 athletes across 10 schools. There were also about 2.5 times more public schools represented on the site than private schools. [Click for more.](#conferences)
 
 #### 5. Future Work: Products and Prices 
-For each of the more than 10,000 athletes on the site, there can dozens of product options that vary in price, type, and quantity between athletes, schools and sports. That is data ripe for analysis within the context of my promotional products-based internship
+For each of the more than 10,000 athletes on the site, there can dozens of product options that vary in price, type, and quantity between athletes, schools and sports. That is data ripe for analysis within the context of my promotional products-based internship.[Click for more.](#products)
 
 #### Let's get into it! 
 
@@ -60,6 +61,8 @@ library(stringr)
 ## Part 1
 
 ### School-level data
+
+<a id="schools"></a>
 
 First, I had to scrape the main website page to get the base url for each school's page. I used an adapted version of code from Rob and Aiden to do this. 
 
@@ -143,15 +146,18 @@ This dataframe then allowed me to do some preliminary analysis based on the numb
 by_school <- scraped_results_df %>%
   group_by(name) %>%
   summarize(
-    athletes = n())
+    athletes = n()) %>%
+  arrange(desc(athletes))
 ```
 
 <iframe title="Top 10 schools by number of athletes on nil.store" aria-label="Bar Chart" id="datawrapper-chart-UYLwq" src="https://datawrapper.dwcdn.net/UYLwq/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="447" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
 </script>
 
-Ohio State, for example, had the most athletes represented, with almost 600. Kansas had the lowest number of athletes by far, with less than 50 (about half of their next closest school).
+Ohio State, for example, had the most athletes represented, with almost 600, followed by UConn, Boise State, North Carolina and Purdue. Kansas had the lowest number of athletes, with less than 50 (about half of their next closest school).
 
-Then, to add in some additional information about each school, I extracted a data table from Wikipedia about their Division 1 partner schools. By adapting and joining this information to my existing dataframe, I was able to start to get a bigger picture about the website. 
+<a id="conferences"></a>
+
+Then, to add in some additional information about each school, I extracted a data table from Wikipedia about the NCAA's Division 1 partner schools. By adapting and joining this information to my existing dataframe, I was able to start to get a bigger picture about the website. 
 
 ```{r}
 ncaa_url <- "https://en.wikipedia.org/wiki/List_of_NCAA_Division_I_institutions"
@@ -214,7 +220,7 @@ states_compared <- states %>%
 head(states_compared)
 ```
 
-Next, I looked at public vs. private schools. I was curious to see this disparity because I wondered if private schools would be less represented in the NIL world because they have more endowment funding to pass on to their athletes, if not directly in NIL deals than with amenities on campus or prominent donors to connect with. Private schools are also less comoonly "big sports schools," I think. 
+Next, I looked at public vs. private schools. I was curious to see this disparity because I wondered if private schools would be less represented in the NIL world because they have more endowment funding to pass on to their athletes, if not directly in NIL deals than with amenities on campus or prominent donors to connect with. Private schools are also less commonly "big sports schools," I think. 
 
 I was correct that there were far fewer private schools represented on this list, and they also had fewer athletes per school, on average. 
 
@@ -285,7 +291,7 @@ This was a necessary next step because of the drop-down style setup of each page
 
 First, using the urls that we pulled in step one, I (semi-accidentally) scraped every single menu header on every single school's page, and its corresponding url ending. It doesn't have a particularly accurate name because that's not what I thought it was going to do, but we move along!
 
-Click here to skip to the analysis of gender and sport data. 
+[Click here](#gender) to skip to the analysis of gender and sport data. 
 
 ```{r}
 # Initialize a list to store the results
@@ -500,109 +506,109 @@ head(all_sport_pages)
 
 Then, it was time to continue scraping in order to obtain more information about the specific sports under each school, and the number of athletes under each of those sports. 
 
-```{r}
+```{r include=FALSE}
 
-sport_and_athlete_df <- list()
-for (i in 1:nrow(all_sport_pages)) {
-  school <- all_sport_pages$school[i]
-  url <- trimws(all_sport_pages$combined_url[i])
-  
-  tryCatch({
-    html <- read_html(url)
-    
-    # Extract sport from page title (assuming it's in the format "Sport - School Name")
-    sport <- html %>%
-      html_element("title") %>%
-      html_text() %>%
-      str_extract("^[^-]+") %>%
-      str_trim()
-    
-    athletes <- html %>%
-      html_elements(".card__heading a") %>%
-      html_text() 
-    
-    if (length(athletes) > 0) {
-      sport_and_athlete_df[[i]] <- tibble(school = school, gender = gender, sport = sport, athlete = athletes)
-    } else {
-      sport_and_athlete_df[[i]] <- tibble(school = school, gender = gender, sport = sport, athlete = NA_character_)
-    }
-  }, error = function(e) {
-    sport_and_athlete_df[[i]] <- tibble(school = school, sport = NA_character_, athlete = NA_character_)
-    warning(paste("Error occurred for", school, ":", e$message))
-  })
-}
-
-# Combine all tibbles into a single dataframe
-sport_and_athlete_df <- bind_rows(sport_and_athlete_df)
+# sport_and_athlete_df <- list()
+# for (i in 1:nrow(all_sport_pages)) {
+#   school <- all_sport_pages$school[i]
+#   url <- trimws(all_sport_pages$combined_url[i])
+#   
+#   tryCatch({
+#     html <- read_html(url)
+#     
+#     # Extract sport from page title (assuming it's in the format "Sport - School Name")
+#     sport <- html %>%
+#       html_element("title") %>%
+#       html_text() %>%
+#       str_extract("^[^-]+") %>%
+#       str_trim()
+#     
+#     athletes <- html %>%
+#       html_elements(".card__heading a") %>%
+#       html_text() 
+#     
+#     if (length(athletes) > 0) {
+#       sport_and_athlete_df[[i]] <- tibble(school = school, gender = gender, sport = sport, athlete = athletes)
+#     } else {
+#       sport_and_athlete_df[[i]] <- tibble(school = school, gender = gender, sport = sport, athlete = NA_character_)
+#     }
+#   }, error = function(e) {
+#     sport_and_athlete_df[[i]] <- tibble(school = school, sport = NA_character_, athlete = NA_character_)
+#     warning(paste("Error occurred for", school, ":", e$message))
+#   })
+# }
+# 
+# # Combine all tibbles into a single dataframe
+# sport_and_athlete_df <- bind_rows(sport_and_athlete_df)
 ```
 
 This dataset was effective, but a bit messy, with duplicates, odd formatting and other quirks, such as the Boise State Men's Cross Country Team being linked on the Belmont University page. It required a good bit of cleaning to get it usable.
 
 ```{r}
-
-sport_and_athlete_df_cleaned <- sport_and_athlete_df %>%
-  mutate(school = case_when(
-    school == "Belmont" & sport == "Boise State Men's Cross Country\n – NIL Store" ~ "Boise State",
-    school == "Belmont" & sport == "Boise State Women's Cross Country\n – NIL Store" ~ "Boise State",
-    TRUE ~ school
-  ))
+# 
+# sport_and_athlete_df_cleaned <- sport_and_athlete_df %>%
+#   mutate(school = case_when(
+#     school == "Belmont" & sport == "Boise State Men's Cross Country\n – NIL Store" ~ "Boise State",
+#     school == "Belmont" & sport == "Boise State Women's Cross Country\n – NIL Store" ~ "Boise State",
+#     TRUE ~ school
+#   ))
 ```
 
 ```{r}
-sport_and_athlete_df_cleaned <- sport_and_athlete_df_cleaned %>%
-  # Clean up the sport column (keep this part as it was)
-  mutate(
-    sport = str_extract(sport, "^[^–—-]+"),  # Get text before "-", "–", or "—"
-    sport = str_remove_all(sport, "Men's|Women's"),  # Remove "Men's" or "Women's"
-    sport = str_remove_all(sport, school),  # Remove school name
-    sport = str_trim(sport)  # Trim whitespace
-  ) %>%
-  # Clean up the athlete column (updated part)
-  mutate(
-    athlete = str_remove(athlete, "\\|.*"),  # Remove "|" and everything after
-    athlete = str_remove_all(athlete, "#\\d+"),  # Remove "#" followed by digits
-    athlete = str_remove_all(athlete, "\\d+"),  # Remove all digits
-    athlete = str_remove_all(athlete, "[#]"),  # Remove any remaining "#"
-    athlete = str_trim(athlete),  # Trim whitespace
-    athlete = str_squish(athlete)  # Replace multiple spaces with a single space
-  ) %>%
-  # Remove "Sign Up Now!" and duplicates (keep this part as it was)
-  filter(
-    athlete != "Sign Up Now!"
-  ) %>%
-  # Optional: arrange by school and sport for readability
-  arrange(school, sport) %>%
-  select(gender, everything())%>%
-  # Remove duplicates based on athlete column only
-  distinct(athlete, .keep_all = TRUE)
-
-
-sport_and_athlete_df_cleaned <- sport_and_athlete_df_cleaned %>%
-  mutate(
-    sport = case_when(
-      school == "California Baptist" ~ str_remove(sport, "CBU "),
-      school == "Stephen F. Austin" ~ str_remove(sport, "SFA "),
-      TRUE ~ sport
-    )
-  )
-
-# Check the unique characters in the "sport" column
-unique_chars <- unique(sport_and_athlete_df_cleaned$sport)
-
-sport_and_athlete_df_cleaned <- sport_and_athlete_df_cleaned %>%
-  mutate(sport = str_trim(sport)) 
+# sport_and_athlete_df_cleaned <- sport_and_athlete_df_cleaned %>%
+#   # Clean up the sport column (keep this part as it was)
+#   mutate(
+#     sport = str_extract(sport, "^[^–—-]+"),  # Get text before "-", "–", or "—"
+#     sport = str_remove_all(sport, "Men's|Women's"),  # Remove "Men's" or "Women's"
+#     sport = str_remove_all(sport, school),  # Remove school name
+#     sport = str_trim(sport)  # Trim whitespace
+#   ) %>%
+#   # Clean up the athlete column (updated part)
+#   mutate(
+#     athlete = str_remove(athlete, "\\|.*"),  # Remove "|" and everything after
+#     athlete = str_remove_all(athlete, "#\\d+"),  # Remove "#" followed by digits
+#     athlete = str_remove_all(athlete, "\\d+"),  # Remove all digits
+#     athlete = str_remove_all(athlete, "[#]"),  # Remove any remaining "#"
+#     athlete = str_trim(athlete),  # Trim whitespace
+#     athlete = str_squish(athlete)  # Replace multiple spaces with a single space
+#   ) %>%
+#   # Remove "Sign Up Now!" and duplicates (keep this part as it was)
+#   filter(
+#     athlete != "Sign Up Now!"
+#   ) %>%
+#   # Optional: arrange by school and sport for readability
+#   arrange(school, sport) %>%
+#   select(gender, everything())%>%
+#   # Remove duplicates based on athlete column only
+#   distinct(athlete, .keep_all = TRUE)
+# 
+# 
+# sport_and_athlete_df_cleaned <- sport_and_athlete_df_cleaned %>%
+#   mutate(
+#     sport = case_when(
+#       school == "California Baptist" ~ str_remove(sport, "CBU "),
+#       school == "Stephen F. Austin" ~ str_remove(sport, "SFA "),
+#       TRUE ~ sport
+#     )
+#   )
+# 
+# # Check the unique characters in the "sport" column
+# unique_chars <- unique(sport_and_athlete_df_cleaned$sport)
+# 
+# sport_and_athlete_df_cleaned <- sport_and_athlete_df_cleaned %>%
+#   mutate(sport = str_trim(sport)) 
 
 ```
 
 ```{r}
 
-sport_and_athlete_df_cleaned <- sport_and_athlete_df_cleaned %>%
-  mutate(sport = case_when(
-    sport %in% c("Ladybirds", "Dance Team", "Dancing") ~ "Dance",
-    sport %in% c("Cheerleading", "Spirit", "Stunt") ~ "Cheerleading",
-    sport %in% c("Swim & Dive", "Swim and Dive", "Swimming", "Swimming & Diving") ~ "Swim and Dive",
-    TRUE ~ sport
-  ))
+# sport_and_athlete_df_cleaned <- sport_and_athlete_df_cleaned %>%
+#   mutate(sport = case_when(
+#     sport %in% c("Ladybirds", "Dance Team", "Dancing") ~ "Dance",
+#     sport %in% c("Cheerleading", "Spirit", "Stunt") ~ "Cheerleading",
+#     sport %in% c("Swim & Dive", "Swim and Dive", "Swimming", "Swimming & Diving") ~ "Swim and Dive",
+#     TRUE ~ sport
+#   ))
 ```
 
 This resulted in a dataframe that specifically listed out all of the athletes listed under the team's rosters on the site. This meant that some athletes who were listed on the main school "athlete" menu — the list obtained much earlier in the process — but not on a roster were excluded from the final data. 
@@ -613,6 +619,9 @@ Based on some Googling, I believe this often indicated that those athletes who w
 
 #### Sport and Gender breakdowns. 
 
+<a id="gender"></a>
+<a id="sports"></a>
+
 This is where this gets interesting. 
 
 <iframe title="Football players make up more than a quarter of nil.store" aria-label="Election Donut" id="datawrapper-chart-ZQlGy" src="https://datawrapper.dwcdn.net/ZQlGy/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="598" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
@@ -621,14 +630,14 @@ This is where this gets interesting.
 Looking sport by sport, football is overwhelmingly the biggest sport represented on the site, with basketball and baseball combining in spots two and three to not-quite equal the football numbers. 
  
 ```{r}
-sports_participants <- sport_and_athlete_df_cleaned %>%
-  group_by(sport) %>%
-  summarize(
-    number_athletes = n()
-  ) %>%
-  arrange(desc(number_athletes))
-
-head(sports_participants)
+# sports_participants <- sport_and_athlete_df_cleaned %>%
+#   group_by(sport) %>%
+#   summarize(
+#     number_athletes = n()
+#   ) %>%
+#   arrange(desc(number_athletes))
+# 
+# head(sports_participants)
 ```
 As a fun aside: some interesting (and perhaps surprising!) sports contained in the "other" category include: 
 
@@ -644,18 +653,18 @@ Triathlon, with 8 athletes
 
 and Squash, with 2 athletes!
 
-However, when you split it up by individual men's / women's team, football (and baseball, to a lesser degree) still dominate the rankings for most athletes featured on the site, but the other sports shift around. 
+However, when you split it up by individual men's / women's team, football (and baseball, to a lesser degree) still dominate the rankings for most athletes featured on the site — but the other sports shift around. 
 
 <iframe title="By individual team sports, women's soccer replaces basketball at number 3 spot" aria-label="Table" id="datawrapper-chart-ZtiP8" src="https://datawrapper.dwcdn.net/ZtiP8/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="470" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
 </script>
 
 ```{r}
-mens_womens <- sport_and_athlete_df_cleaned %>%
-  group_by(sport, gender) %>%
-  summarize (
-    number_athletes = n() 
-  ) %>%
-  arrange(desc(number_athletes))
+# mens_womens <- sport_and_athlete_df_cleaned %>%
+#   group_by(sport, gender) %>%
+#   summarize (
+#     number_athletes = n() 
+#   ) %>%
+#   arrange(desc(number_athletes))
 ```
 Looking at this data from a broader lens, of the more than 10,000 athletes on the site, more than 60% of them are male. However, it's close to 60% of the female **teams** that make up the site. 
 
@@ -664,17 +673,19 @@ There are about 6200 male athletes, but only 383 teams, representing an average 
 <iframe title="More male athletes than female athletes are using nil.store, but more women's teams are represented" aria-label="Multiple Pies" id="datawrapper-chart-EqaEU" src="https://datawrapper.dwcdn.net/EqaEU/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="417" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
 </script>
 
+#### Other Tables
+
 I made these tables to explore the data and look for interesting patterns like this one.
 
 This determined the number of male and female athletes on the site. 
 ```{r}
-by_gender <- sport_and_athlete_df_cleaned %>%
-  group_by(gender) %>%
-  summarize(
-    number_athletes = n()
-  )
-
-print(by_gender)
+# by_gender <- sport_and_athlete_df_cleaned %>%
+#   group_by(gender) %>%
+#   summarize(
+#     number_athletes = n()
+#   )
+# 
+# print(by_gender)
 ```
 
 This determined the number of men's and women's teams on the site.
@@ -691,22 +702,22 @@ print(gender_teams)
 This created a dataframe with the number of male athletes, the number of female athletes, and the number of total athletes for each school's site. 
 
 ```{r}
-by_team <- sport_and_athlete_df_cleaned %>%
-  group_by(school, gender) %>%
-  summarize(
-    number_athletes = n()
-  ) %>%
-  pivot_wider(names_from = gender, 
-              values_from = number_athletes) %>%
-  rename(
-    mens_athletes = `Men's`,
-    womens_athletes = `Women's`
-  ) %>%
-  mutate(
-    total_athletes = sum(mens_athletes + womens_athletes)
-  )
-
-head(by_team)
+# by_team <- sport_and_athlete_df_cleaned %>%
+#   group_by(school, gender) %>%
+#   summarize(
+#     number_athletes = n()
+#   ) %>%
+#   pivot_wider(names_from = gender, 
+#               values_from = number_athletes) %>%
+#   rename(
+#     mens_athletes = `Men's`,
+#     womens_athletes = `Women's`
+#   ) %>%
+#   mutate(
+#     total_athletes = sum(mens_athletes + womens_athletes)
+#   )
+# 
+# head(by_team)
 ```
 
 Similarly, this created a dataframe with the number of men's teams, the number of women's teams, and the total number of teams for each school's site. 
@@ -726,29 +737,30 @@ team_gender_schools <- all_sport_pages %>%
   mutate(
     total_teams = sum(mens_teams + womens_teams)
   )
+
+head(team_gender_schools)
 ```
 
 Finally, this dataframe displays the number of athletes on each team, at each school. I think there is useful information to come from this one in particular — how many schools have baseball teams, for example, or what the team with the highest number of athletes is (that isn't football). However, the number of teams on this list is slighly less than the number in my other teams databases, so I'm unsure what got lost in translation. 
 
 ```{r}
-individual_teams <- sport_and_athlete_df_cleaned %>%
-  group_by(sport, gender, school) %>%
-  summarize(
-    number_athletes = n()
-  )  %>%
-  arrange(desc(number_athletes))
-
+# individual_teams <- sport_and_athlete_df_cleaned %>%
+#   group_by(sport, gender, school) %>%
+#   summarize(
+#     number_athletes = n()
+#   )  %>%
+#   arrange(desc(number_athletes))
+# 
+# head(individual_teams)
 ```
 
-
 ## Part 4
+
 ### Products and Prices
 
 Due to the many complications of scraping, I didn't have as much time to work with this data as I would have liked. However, I did develop code that works for scraping the full product list of one school, and all of its athletes (I think). Hopefully, that can be adapted to eventually scrape the full website, but for now, this works for a demonstration. 
 
 First, using the dataframe with the full list of team urls, I created a list of athlete urls with all of the values from the gender_sport_df table that were NOT in the all_sport_pages table. 
-
-This data is going to 
 
 ```{r}
 # Create the third dataframe athlete_urls
@@ -780,42 +792,69 @@ head(athlete_urls)
 For the purposes of this presentation, I chose to scrape Ohio State's page, since it has the highest number of athletes. 
 
 ![Image description](https://nil.store/cdn/shop/files/Untitled_design_1a4404b7-a3bc-4363-b31e-803d86eb3348.png?v=1694482642)
-
 This process went into each athlete's url, looked for the html information below that indicates a product and its price, and compiled them into a dataframe. 
 
 This process also deleted duplicates, which proved helpful, as some athletes had name-specific products and some did not. This is the idea I would like to explore most moving forward into my internship, and the idea that I think that would turn into the most focused story for the outlet I'm writing for.  
 
 ```{r}
-ohio_state <- athlete_urls[athlete_urls$name == "Ohio State", ]
-
-# Initialize an empty data frame to store the results
-ohio_state_products <- data.frame()
-
-# Loop through rows 1-236 of athlete_urls
-for (i in 1:nrow(ohio_state)) {
-  # Read the HTML content from the URL
-  url <- ohio_state$combined_url[i]
-  webpage <- read_html(url)
-  
-  # Extract product names and prices using CSS selectors
-  product_elements <- webpage %>% html_nodes("div h3 a") %>% html_text(trim = TRUE)
-  price_elements <- webpage %>% html_nodes("span.price-item.price-item--regular") %>% html_text(trim = TRUE)
-  
-  # Select only half of the product elements to match the number of price elements
-  half_product_elements <- product_elements[seq(1, length(product_elements), by = 2)]
-  
-  # Check if the lengths of half_product_elements and price_elements are the same
-  if (length(half_product_elements) == length(price_elements)) {
-    # Combine the product names and prices into a data frame
-    products <- data.frame("Product Name" = half_product_elements, "Price" = price_elements)
-    
-    # Append the extracted data to the all_products data frame
-    ohio_state_products <- rbind(ohio_state_products, products)
-  } else {
-    warning(paste("Unequal number of product names and prices extracted from URL:", url))
-  }
-}
+# ohio_state <- athlete_urls[athlete_urls$name == "Ohio State", ]
+# 
+# # Initialize an empty data frame to store the results
+# ohio_state_products <- data.frame()
+# 
+# # Loop through rows 1-236 of athlete_urls
+# for (i in 1:nrow(ohio_state)) {
+#   # Read the HTML content from the URL
+#   url <- ohio_state$combined_url[i]
+#   webpage <- read_html(url)
+#   
+#   # Extract product names and prices using CSS selectors
+#   product_elements <- webpage %>% html_nodes("div h3 a") %>% html_text(trim = TRUE)
+#   price_elements <- webpage %>% html_nodes("span.price-item.price-item--regular") %>% html_text(trim = TRUE)
+#   
+#   # Select only half of the product elements to match the number of price elements
+#   half_product_elements <- product_elements[seq(1, length(product_elements), by = 2)]
+#   
+#   # Check if the lengths of half_product_elements and price_elements are the same
+#   if (length(half_product_elements) == length(price_elements)) {
+#     # Combine the product names and prices into a data frame
+#     products <- data.frame("Product Name" = half_product_elements, "Price" = price_elements)
+#     
+#     # Append the extracted data to the all_products data frame
+#     ohio_state_products <- rbind(ohio_state_products, products)
+#   } else {
+#     warning(paste("Unequal number of product names and prices extracted from URL:", url))
+#   }
+# }
+# 
+# head(ohio_state_products)
 ```
+
+```{r}
+# library(tidyr)
+# 
+# ohio_state_clean <- ohio_state_products %>%
+#   separate(Product.Name, into = c("Product", "Athlete_Name"), sep = " - ", fill = "right") %>%
+#   mutate(Price = str_replace(Price, "From \\$", ""),
+#          Price = str_replace(Price, "\\$", "")) %>%
+#   mutate(Price = as.numeric(Price)) %>%
+#   mutate(School = "Ohio State")
+# 
+# ohio_state_clean <- ohio_state_clean %>%
+#   mutate(Type = str_extract(Product, "\\w+$")) %>%
+#   mutate(Product = str_remove(Product, "\\s\\w+$")) %>%
+#   select(School, Athlete_Name, Product, Type, Price)
+# 
+# ohio_state_clean$Product <- paste(ohio_state_clean$Product, ohio_state_clean$Type, sep = " ")
+# 
+# ohio_state_clean$Athlete_Name <- gsub("[^a-zA-Z ]", "", ohio_state_clean$Athlete_Name)
+
+```
+
+After cleaning the data a bit, you get a chart that looks a bit like this: 
+
+<iframe title="Ohio State promotional products on nil.store" aria-label="Table" id="datawrapper-chart-67Faz" src="https://datawrapper.dwcdn.net/67Faz/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="764" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
+</script>
 
 ## Questions to look to now 
 
